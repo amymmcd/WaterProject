@@ -15,6 +15,17 @@ public class WaterController : ControllerBase
     [HttpGet("AllProjects")]
     public IActionResult GetAllProjects(int pageSize = 5, int pageNum = 1) //because you are returning an object instead of a list of projects, use IActionResult instead of IEnumerable
     {
+        string? favProjType = Request.Cookies["FavoriteProjectType"];
+        Console.WriteLine("~~~~COOKIE~~~~\n" + favProjType);
+        
+        HttpContext.Response.Cookies.Append("FavoriteProjectType", "Borehole Well and Hand Pump", new CookieOptions
+        {
+            HttpOnly = true,
+            Secure = true,
+            SameSite = SameSiteMode.Strict,
+            Expires = DateTime.Now.AddMinutes(1)
+        });
+        
         var result = _context.Projects
             .Skip((pageNum - 1) * pageSize)
             .Take(pageSize)

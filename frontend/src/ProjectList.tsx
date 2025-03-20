@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Project } from './types/Project';
+import CookieConsent from "react-cookie-consent";
+
 
 function ProjectList() {
   const [projects, setProjects] = useState<Project[]>([]);
@@ -11,7 +13,10 @@ function ProjectList() {
   useEffect(() => {
     const fetchProjects = async () => {
       const response = await fetch(
-        `http://localhost:4000/api/Water/AllProjects?pageSize=${pageSize}&pageNum=${pageNum}`
+        `http://localhost:4000/api/Water/AllProjects?pageSize=${pageSize}&pageNum=${pageNum}`,
+        {
+          credentials: "include", //allows cookies
+        }
       );
       const data = await response.json();
       setProjects(data.projects);
